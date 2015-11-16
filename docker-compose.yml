@@ -8,6 +8,8 @@ app:
   image: indiehosters/oxwall
   links:
     - db
+  volumes:
+    - ./data:/var/www/html
   env_file:
     - ./.env
 web:
