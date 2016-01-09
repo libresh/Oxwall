@@ -1,4 +1,4 @@
-FROM php:5.6-fpm
+FROM php:5-apache
 
 RUN apt-get update && apt-get install -y \
       cron \
@@ -13,9 +13,10 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr \
  && docker-php-ext-install gd mbstring mysql pdo_mysql zip ftp
 
-ENV OXWALL_VERSION 1.8.0
+RUN a2enmod rewrite
+COPY apache2.conf /etc/apache2/apache2.conf
 
-VOLUME /var/www/html/
+ENV OXWALL_VERSION 1.8.0
 
 RUN curl -fsSL -o oxwall.zip \
       "http://www.oxwall.org/dl/oxwall-$OXWALL_VERSION.zip" \
@@ -25,8 +26,8 @@ RUN curl -fsSL -o oxwall.zip \
  && unzip oxwall.zip \
  && rm oxwall.zip
 
-COPY php.ini /etc/php5/fpm/php.ini
+COPY php.ini /usr/local/etc/php/php.ini
 COPY docker-entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["php-fpm"]
+CMD ["apache2-foreground"]

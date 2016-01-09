@@ -1,2 +1,2 @@
 SHELL=/bin/bash
-* * * * * root /usr/local/bin/php /your/path/to/oxwall/ow_cron/run.php
+* * * * * root /usr/local/bin/php /var/www/html/ow_cron/run.php
